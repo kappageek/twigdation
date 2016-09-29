@@ -47,7 +47,7 @@ function copy() {
 // Copy page templates into finished HTML files
 function pages() {
   return gulp.src('src/pages/**/*.{html,twig}')
-    .pipe($.twig())
+    .pipe($.twig({base: 'src'}))
     .pipe(gulp.dest(PATHS.dist));
 }
 
