@@ -1,6 +1,14 @@
+{% extends "../layouts/default.twig" %}
+
+{% set page = {
+  'title': 'HOME',
+  'desc': 'Welcome to Twigdation for Sites'
+}%}
+
+{% block page %}
 <div class="row">
   <div class="large-12 columns">
-    <h1>Welcome to Foundation for Sites</h1>
+    <h1>{{ page.desc }}</h1>
   </div>
 </div> 
 
@@ -178,3 +186,5 @@
     <button data-slide="3"><span class="show-for-sr">Fourth slide details.</span></button>
   </nav>
 </div>
+
+{% endblock %}
