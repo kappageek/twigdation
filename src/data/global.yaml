@@ -1,1 +1,3 @@
-name: sample
+site:
+  title: Sample Site
+  desc: Welcome to Twigdation
