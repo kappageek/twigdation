@@ -25,7 +25,7 @@ function loadConfig() {
 
 // Build the "dist" folder by running all of the below tasks
 gulp.task('build',
- gulp.series(clean, gulp.parallel(pages, sass, javascript, images, copy), styleGuide));
+ gulp.series(clean, data, pages, gulp.parallel(sass, javascript, images, copy), styleGuide));
 
 // Build the site, run the server, and watch for file changes
 gulp.task('default',
@@ -44,11 +44,19 @@ function copy() {
     .pipe(gulp.dest(PATHS.dist + '/assets'));
 }
 
+//yaml data
+function data() {
+  return gulp.src('src/data/**/*.yaml')
+    .pipe($.yamlMerge('data.yaml'))
+    .pipe($.yaml())
+    .pipe(gulp.dest('.tmp'))
+}
+
 // Copy page templates into finished HTML files
 function pages() {
   return gulp.src('src/pages/**/*.{html,twig}')
     .pipe($.data(function(file) {
-      return JSON.parse(fs.readFileSync('src/data/data.json'));
+      return JSON.parse(fs.readFileSync('.tmp/data.json'));
     }))
     .pipe($.twig({base: 'src'}))
     .pipe(gulp.dest(PATHS.dist));
@@ -125,7 +133,7 @@ function watch() {
   gulp.watch(PATHS.assets, copy);
   gulp.watch('src/pages/**/*.twig').on('all', gulp.series(pages, browser.reload));
   gulp.watch('src/{layouts,partials}/**/*.twig').on('all', gulp.series(pages, browser.reload));
-  gulp.watch('src/data/**/*.json').on('all', gulp.series(pages, browser.reload));
+  gulp.watch('src/data/**/*.yaml').on('all', gulp.series(data, pages, browser.reload));
   gulp.watch('src/assets/scss/**/*.scss').on('all', gulp.series(sass, browser.reload));
   gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascript, browser.reload));
   gulp.watch('src/assets/img/**/*').on('all', gulp.series(images, browser.reload));
